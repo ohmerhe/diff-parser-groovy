@@ -8,10 +8,12 @@ import io.reflectoring.diffparser.api.UnifiedDiffParser;
 import io.reflectoring.diffparser.api.model.Diff;
 import io.reflectoring.diffparser.api.model.Hunk;
 import io.reflectoring.diffparser.api.model.Line;
-import java.io.InputStream;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
-import org.testng.annotations.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -22,10 +24,17 @@ public class GitDiffTest {
     public void testParse() {
         // given
         DiffParser parser = new UnifiedDiffParser();
-        InputStream in = getClass().getResourceAsStream("git.diff");
+//        InputStream in = getClass().getResourceAsStream("git.diff");
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        File file = new File("git.diff");
 
         // when
-        List<Diff> diffs = parser.parse(in);
+        List<Diff> diffs = null;
+        try {
+            diffs = parser.parse(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // then
         assertNotNull(diffs);

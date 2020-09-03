@@ -1,8 +1,10 @@
+Convert DiffParser from Java to Groovy
+
 ### diffparser
 
 [![Build Status](https://travis-ci.org/thombergs/diffparser.svg?branch=master)](https://travis-ci.org/thombergs/diffparser)
 
-Parse unified diffs with Java.
+Parse unified diffs with Groovy.
 
 ### Code example
 ```

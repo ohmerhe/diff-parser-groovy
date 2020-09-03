@@ -15,10 +15,8 @@
  */
 package io.reflectoring.diffparser.unified;
 
-import static io.reflectoring.diffparser.api.UnifiedDiffParser.LINE_RANGE_PATTERN;
+import io.reflectoring.diffparser.api.UnifiedDiffParser;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * State machine for a parser parsing a unified diff.
@@ -222,8 +220,6 @@ public enum ParserState {
         }
     };
 
-    protected static Logger logger = LoggerFactory.getLogger(ParserState.class);
-
     /**
      * Returns the next state of the state machine depending on the current state and the content of a window of lines around the line
      * that is currently being parsed.
@@ -234,7 +230,7 @@ public enum ParserState {
     public abstract ParserState nextState(ParseWindow window);
 
     protected void logTransition(String currentLine, ParserState fromState, ParserState toState) {
-        logger.debug(String.format("%12s -> %12s: %s", fromState, toState, currentLine));
+        println(String.format("%12s -> %12s: %s", fromState, toState, currentLine));
     }
 
     protected boolean matchesFromFilePattern(String line) {
@@ -254,7 +250,7 @@ public enum ParserState {
     }
 
     protected boolean matchesHunkStartPattern(String line) {
-        return LINE_RANGE_PATTERN.matcher(line).matches();
+        return UnifiedDiffParser.LINE_RANGE_PATTERN.matcher(line).matches();
     }
 
     protected boolean matchesEndPattern(String line, ParseWindow window) {
