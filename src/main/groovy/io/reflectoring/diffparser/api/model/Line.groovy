@@ -46,9 +46,12 @@ public class Line {
 
     }
 
-    private final LineType lineType;
+    private final LineType lineType
 
-    private final String content;
+    private final String content
+    private int toLineNumber
+    private int fromLineNumber
+    private int diffPosition
 
     public Line(LineType lineType, String content) {
         this.lineType = lineType;
@@ -73,4 +76,27 @@ public class Line {
         return content;
     }
 
+    int getToLineNumber() {
+        return toLineNumber
+    }
+
+    void setToLineNumber(int toLineNumber) {
+        this.toLineNumber = toLineNumber
+    }
+
+    int getFromLineNumber() {
+        return fromLineNumber
+    }
+
+    void setFromLineNumber(int fromLineNumber) {
+        this.fromLineNumber = fromLineNumber
+    }
+
+    int getDiffPosition() {
+        return diffPosition
+    }
+
+    void setDiffPosition(int diffPosition) {
+        this.diffPosition = diffPosition
+    }
 }

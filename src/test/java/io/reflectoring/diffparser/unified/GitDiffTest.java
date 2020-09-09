@@ -35,6 +35,13 @@ public class GitDiffTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        for (int i = 0; i < diffs.size(); i++) {
+            Diff diff = diffs.get(i);
+            System.out.println("diff --- "+ i);
+            for (Hunk hunk : diff.getHunks()){
+                System.out.println("To file: " + diff.getToFileName() + "(" + hunk.getToFileRange().getLineStart() + ":" + (hunk.getToFileRange().getLineStart() + hunk.getToFileRange().getLineCount()) + ")");
+            }
+        }
 
         // then
         assertNotNull(diffs);
@@ -58,5 +65,19 @@ public class GitDiffTest {
         assertEquals(8, lines.size());
         assertEquals(Line.LineType.FROM, lines.get(3).getLineType());
         assertEquals(Line.LineType.TO, lines.get(4).getLineType());
+
+
+        assertEquals(9, lines.get(4).getToLineNumber());
+        assertEquals(5, lines.get(4).getDiffPosition());
+
+        Hunk hunk2 = diff1.getHunks().get(1);
+        lines = hunk2.getLines();
+
+        assertEquals(105, lines.get(4).getFromLineNumber());
+        assertEquals(0, lines.get(4).getToLineNumber());
+        assertEquals(13, lines.get(4).getDiffPosition());
+
+        assertEquals(117, lines.get(16).getFromLineNumber());
+        assertEquals(104, lines.get(16).getToLineNumber());
     }
 }

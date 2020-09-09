@@ -103,16 +103,22 @@ public class UnifiedDiffParser implements DiffParser {
 
     private void parseNeutralLine(Diff currentDiff, String currentLine) {
         Line line = new Line(Line.LineType.NEUTRAL, currentLine)
+        currentDiff.getNextLineNumber(line)
+        currentDiff.getNextDiffPosition(line)
         currentDiff.getLatestHunk().getLines().add(line)
     }
 
     private void parseToLine(Diff currentDiff, String currentLine) {
         Line toLine = new Line(Line.LineType.TO, currentLine.substring(1))
+        currentDiff.getNextLineNumber(toLine)
+        currentDiff.getNextDiffPosition(toLine)
         currentDiff.getLatestHunk().getLines().add(toLine)
     }
 
     private void parseFromLine(Diff currentDiff, String currentLine) {
         Line fromLine = new Line(Line.LineType.FROM, currentLine.substring(1))
+        currentDiff.getNextLineNumber(fromLine)
+        currentDiff.getNextDiffPosition(fromLine)
         currentDiff.getLatestHunk().getLines().add(fromLine)
     }
 

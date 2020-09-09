@@ -96,4 +96,68 @@ public class Diff {
     public Hunk getLatestHunk() {
         return hunks.get(hunks.size() - 1);
     }
+
+    public void getNextLineNumber(Line line){
+        getNextLineNumber(getLatestHunk(), getLatestHunk().getLines().size() - 1, line)
+    }
+
+    public void getNextLineNumber(Hunk hunk, int linePosition, Line line){
+        if (line.lineType == Line.LineType.FROM || line.lineType == Line.LineType.NEUTRAL){
+            getNextFromLineNumber(hunk, linePosition, line)
+        }
+        if (line.lineType == Line.LineType.TO || line.lineType == Line.LineType.NEUTRAL){
+            getNextToLineNumber(hunk, linePosition, line)
+        }
+    }
+    public void getNextFromLineNumber(Hunk hunk, int linePosition, Line line){
+        if (linePosition < 0){
+            line.fromLineNumber = hunk.toFileRange.lineStart
+            return
+        }
+        if (linePosition >= 0){
+            Line tempLine = hunk.getLines().get(linePosition)
+            if (tempLine.lineType == Line.LineType.NEUTRAL || tempLine.lineType == Line.LineType.FROM){
+                line.fromLineNumber = tempLine.fromLineNumber + 1
+            }else {
+                getNextFromLineNumber(hunk, linePosition - 1, line)
+            }
+        }
+    }
+
+    public void getNextToLineNumber(Hunk hunk, int linePosition, Line line){
+        if (linePosition < 0){
+            line.toLineNumber = hunk.toFileRange.lineStart
+            return
+        }
+        if (linePosition >= 0){
+            Line tempLine = hunk.getLines().get(linePosition)
+            if (tempLine.lineType == Line.LineType.NEUTRAL || tempLine.lineType == Line.LineType.TO){
+                line.toLineNumber = tempLine.toLineNumber + 1
+            }else {
+                getNextToLineNumber(hunk, linePosition - 1, line)
+            }
+        }
+    }
+
+
+    public int getNextDiffPosition(Line line){
+        return getNextDiffPosition(hunks.size() - 1, getLatestHunk().getLines().size() - 1, line)
+    }
+
+    public int getNextDiffPosition(int hunkPosition, int linePosition, Line line){
+        if (hunkPosition <= 0 && linePosition < 0){
+            line.diffPosition = 1
+            return line.diffPosition
+        }
+        if (hunkPosition > 0 && linePosition < 0){
+            Hunk preHunk = hunks.get(hunkPosition-1)
+            return getNextDiffPosition(hunkPosition - 1, preHunk.getLines().size() - 1, line)
+        }
+        if (linePosition >= 0){
+            Hunk hunk = hunks.get(hunkPosition)
+            Line tempLine = hunk.getLines().get(linePosition)
+            line.diffPosition = tempLine.diffPosition + 1
+            return line.diffPosition
+        }
+    }
 }
